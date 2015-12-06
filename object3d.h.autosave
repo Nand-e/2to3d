@@ -1,0 +1,56 @@
+#ifndef ITEM2_H
+#define ITEM2_H
+
+#include <QVector>
+#include <QVector3D>
+#include <QVector2D>
+#include <QImage>
+#include <QMatrix>
+
+#include "opencv2/highgui/highgui.hpp"
+
+#include <fstream>
+#include <iostream>
+
+#include "glwidget.h"
+#include "objectItem.h"
+
+class QKeyEvent;
+class QMatrix4x4;
+class QPixmap;
+
+class QuadObj : public ObjectItem {
+
+public:
+    QuadObj(const QString data, ObjectItem *parent = 0);
+    ~QuadObj ();
+
+
+    virtual void makeobject ();                             // make empty object initailzed object
+    virtual void drawgl ( GLWidget  &gl, QMatrix4x4 &mat ); // draw an item
+    virtual void rotate (QVector3D & axis, float angle );
+    virtual bool saveToFile ( std::ofstream & ofs);         // it called by project
+    virtual bool loadFromFile(std::ifstream & ifs);
+    virtual void takeTexture ();                            // Take texture coordinate from background image
+    virtual bool manipulate (QKeyEvent *event);             // Manipulate Item byKey (etc....)
+    virtual std::string getType() const;
+    virtual QMatrix4x4  getMatrix();
+
+    QVector<QVector3D>  vertices;                   // Item verticies for object
+    QVector<QVector2D>  texCoords;                  // Texture coordinates // TO DO need to be generalized for every object
+//  private: public only for test
+    QVector3D pos, rot, scale;                      // Item data // maybe we need scale too ??
+    virtual void step (QVector3D & vect);           // move obejct;
+    unsigned int textureID;                         // GPU Texture ID
+    cv::Mat * textureMat;                           // Texture in cpu memroy as cv Mat
+    QPixmap   textPixmap;                           // Shared memory with cv Mat ( GUI porpose )
+
+    QMatrix4x4 rotation;
+
+private:
+    void sortCorners      ( cv::Point2f * corners );                    // sort quad corners
+    void UvtoCvCoordinate ( cv::Mat & input, cv::Point2f * output );    //
+    QImage cvMatToQImage  ( const cv::Mat &inMat );
+};
+
+#endif // ITEM2_H

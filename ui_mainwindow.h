@@ -19,7 +19,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
@@ -49,14 +48,11 @@ public:
     QVBoxLayout *ItemLay_2;
     QWidget *horizontalLayoutWidget_2;
     QHBoxLayout *horizontalLayout_3;
-    QVBoxLayout *verticalLayout_5;
-    QPushButton *pushButton_2;
-    QVBoxLayout *verticalLayout_2;
-    QToolButton *toolButton_2;
+    QHBoxLayout *horizontalLayout_4;
+    QToolButton *ItemMovementB;
+    QToolButton *FreeCamButton;
+    QToolButton *ImageCamB;
     QToolButton *Resetfreecamera;
-    QVBoxLayout *verticalLayout_3;
-    QRadioButton *radioButton;
-    QRadioButton *radioButton_2;
     QVBoxLayout *verticalLayout_4;
     QRadioButton *radioButton_5;
     QRadioButton *radioButton_4;
@@ -138,49 +134,56 @@ public:
         ItemLay_2->setContentsMargins(0, 0, 0, 0);
         horizontalLayoutWidget_2 = new QWidget(centralwidget);
         horizontalLayoutWidget_2->setObjectName(QStringLiteral("horizontalLayoutWidget_2"));
-        horizontalLayoutWidget_2->setGeometry(QRect(180, 20, 681, 48));
+        horizontalLayoutWidget_2->setGeometry(QRect(180, 20, 681, 44));
         horizontalLayout_3 = new QHBoxLayout(horizontalLayoutWidget_2);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
-        verticalLayout_5 = new QVBoxLayout();
-        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
-        pushButton_2 = new QPushButton(horizontalLayoutWidget_2);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(1);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        horizontalLayout_4->setSizeConstraint(QLayout::SetDefaultConstraint);
+        ItemMovementB = new QToolButton(horizontalLayoutWidget_2);
+        ItemMovementB->setObjectName(QStringLiteral("ItemMovementB"));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/images/ImageRotation.png"), QSize(), QIcon::Active, QIcon::Off);
+        icon.addFile(QStringLiteral(":/images/ImageRotation.png"), QSize(), QIcon::Active, QIcon::On);
+        ItemMovementB->setIcon(icon);
+        ItemMovementB->setIconSize(QSize(32, 32));
+        ItemMovementB->setCheckable(true);
 
-        verticalLayout_5->addWidget(pushButton_2);
+        horizontalLayout_4->addWidget(ItemMovementB);
 
+        FreeCamButton = new QToolButton(horizontalLayoutWidget_2);
+        FreeCamButton->setObjectName(QStringLiteral("FreeCamButton"));
+        FreeCamButton->setText(QStringLiteral("FreeCamera"));
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/images/FreeCam.png"), QSize(), QIcon::Active, QIcon::Off);
+        icon1.addFile(QStringLiteral(":/images/FreeCam.png"), QSize(), QIcon::Active, QIcon::On);
+        FreeCamButton->setIcon(icon1);
+        FreeCamButton->setIconSize(QSize(32, 32));
+        FreeCamButton->setCheckable(true);
+        FreeCamButton->setAutoRaise(false);
 
-        horizontalLayout_3->addLayout(verticalLayout_5);
+        horizontalLayout_4->addWidget(FreeCamButton);
 
-        verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        toolButton_2 = new QToolButton(horizontalLayoutWidget_2);
-        toolButton_2->setObjectName(QStringLiteral("toolButton_2"));
+        ImageCamB = new QToolButton(horizontalLayoutWidget_2);
+        ImageCamB->setObjectName(QStringLiteral("ImageCamB"));
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/images/ImageCam.png"), QSize(), QIcon::Active, QIcon::Off);
+        icon2.addFile(QStringLiteral(":/images/ImageCam.png"), QSize(), QIcon::Active, QIcon::On);
+        ImageCamB->setIcon(icon2);
+        ImageCamB->setIconSize(QSize(32, 32));
+        ImageCamB->setCheckable(true);
 
-        verticalLayout_2->addWidget(toolButton_2, 0, Qt::AlignHCenter);
+        horizontalLayout_4->addWidget(ImageCamB);
 
         Resetfreecamera = new QToolButton(horizontalLayoutWidget_2);
         Resetfreecamera->setObjectName(QStringLiteral("Resetfreecamera"));
 
-        verticalLayout_2->addWidget(Resetfreecamera, 0, Qt::AlignHCenter);
+        horizontalLayout_4->addWidget(Resetfreecamera);
 
 
-        horizontalLayout_3->addLayout(verticalLayout_2);
-
-        verticalLayout_3 = new QVBoxLayout();
-        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
-        radioButton = new QRadioButton(horizontalLayoutWidget_2);
-        radioButton->setObjectName(QStringLiteral("radioButton"));
-
-        verticalLayout_3->addWidget(radioButton);
-
-        radioButton_2 = new QRadioButton(horizontalLayoutWidget_2);
-        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
-
-        verticalLayout_3->addWidget(radioButton_2);
-
-
-        horizontalLayout_3->addLayout(verticalLayout_3);
+        horizontalLayout_3->addLayout(horizontalLayout_4);
 
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
@@ -224,11 +227,9 @@ public:
         actionSave_Project->setText(QApplication::translate("MainWindow", "Save Project", 0));
         actionNew_project->setText(QApplication::translate("MainWindow", "New project", 0));
         actionLoad_Project->setText(QApplication::translate("MainWindow", "Load Project", 0));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Fix camera", 0));
-        toolButton_2->setText(QApplication::translate("MainWindow", "Free Camera", 0));
+        ItemMovementB->setText(QApplication::translate("MainWindow", "...", 0));
+        ImageCamB->setText(QApplication::translate("MainWindow", "...", 0));
         Resetfreecamera->setText(QApplication::translate("MainWindow", "Reset Free Camera", 0));
-        radioButton->setText(QApplication::translate("MainWindow", "Move Camera", 0));
-        radioButton_2->setText(QApplication::translate("MainWindow", "Move Item", 0));
         radioButton_5->setText(QApplication::translate("MainWindow", "Edges", 0));
         radioButton_4->setText(QApplication::translate("MainWindow", "No Edges", 0));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0));

@@ -43,9 +43,12 @@ private slots:
 
     void on_actionLoad_Project_triggered();
 
-    void on_toolButton_2_clicked();
-
     void on_Resetfreecamera_clicked();
+
+
+    void on_FreeCamButton_toggled(bool checked);
+
+    void on_ItemMovementB_toggled(bool checked);
 
 private:
     QScrollBar     * scroll;

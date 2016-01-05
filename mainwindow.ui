@@ -130,52 +130,91 @@ background: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #eef, stop: 1 #2
       <x>180</x>
       <y>20</y>
       <width>681</width>
-      <height>48</height>
+      <height>44</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <property name="spacing">
+        <number>1</number>
+       </property>
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QToolButton" name="ItemMovementB">
          <property name="text">
-          <string>Fix camera</string>
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <activeoff>:/images/ImageRotation.png</activeoff>
+           <activeon>:/images/ImageRotation.png</activeon>
+          </iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item alignment="Qt::AlignHCenter">
-        <widget class="QToolButton" name="toolButton_2">
+       <item>
+        <widget class="QToolButton" name="FreeCamButton">
          <property name="text">
-          <string>Free Camera</string>
+          <string notr="true">FreeCamera</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <activeoff>:/images/FreeCam.png</activeoff>
+           <activeon>:/images/FreeCam.png</activeon>
+          </iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="autoRaise">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
-       <item alignment="Qt::AlignHCenter">
+       <item>
+        <widget class="QToolButton" name="ImageCamB">
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <activeoff>:/images/ImageCam.png</activeoff>
+           <activeon>:/images/ImageCam.png</activeon>
+          </iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="Resetfreecamera">
          <property name="text">
           <string>Reset Free Camera</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QRadioButton" name="radioButton">
-         <property name="text">
-          <string>Move Camera</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_2">
-         <property name="text">
-          <string>Move Item</string>
          </property>
         </widget>
        </item>

@@ -36,6 +36,9 @@ MainWindow::MainWindow(Manager & man1, QWidget *parent) :
 
     timer->start(20);
     setWindowTitle(tr("Textures"));
+
+    statusBar();
+
 }
 
 
@@ -94,16 +97,6 @@ void MainWindow::on_actionLoad_Project_triggered()
 
 }
 
-// Select free camera
-void MainWindow::on_toolButton_2_clicked()
-{
-     man.mainproject->setFreecam( true );
-    // man.actualCamera = man.freeCamera;
-     man.keycontrol   = man.CameraControl;
-
-     ui->radioButton_2->setChecked( true );
-}
-
 // deselect free cam
 void MainWindow::on_pushButton_2_clicked()
 {
@@ -113,4 +106,39 @@ void MainWindow::on_pushButton_2_clicked()
 void MainWindow::on_Resetfreecamera_clicked()
 {
     * man.freeCamera = *man.actualCamera;  //
+}
+
+
+
+
+void MainWindow::on_FreeCamButton_toggled(bool checked)
+{
+    if ( checked ) {
+        man.keycontrol = man.CameraControl;
+        ui->ItemMovementB->setChecked( false );
+        man.mainproject->setFreecam( true );
+        statusBar()->showMessage( QString( "Move free camera."));
+    } else {
+        man.mainproject->setFreecam( false );
+        statusBar()->showMessage( QString( "Free camera switched off."));
+    }
+}
+
+
+/**
+ *
+  Item Movemnet
+ *
+ */
+void MainWindow::on_ItemMovementB_toggled(bool checked)
+{
+    if ( checked ) {
+        man.keycontrol = man.ItemControl;
+        ui->FreeCamButton->setChecked( false );
+        statusBar()->showMessage( QString ("Move 3D Item(s)."));
+    } else {
+        man.keycontrol = man.CameraControl;
+        statusBar()->showMessage( QString ("Move free camera."));
+        // TO DO set free Camera Mode on project
+    }
 }

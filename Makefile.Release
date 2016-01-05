@@ -5,19 +5,19 @@
 # Template: app
 #############################################################################
 
-MAKEFILE      = Makefile.Debug
+MAKEFILE      = Makefile.Release
 
 ####### Compiler, tools and options
 
 CC            = cl
 CXX           = cl
-DEFINES       = -DUNICODE -DWIN32 -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
-CFLAGS        = -nologo -Zm200 -Zc:wchar_t -Zi -MDd -W3 /Fddebug\textures.pdb $(DEFINES)
-CXXFLAGS      = -nologo -Zm200 -Zc:wchar_t -Zi -MDd -GR -W3 -w34100 -w34189 -EHsc /Fddebug\textures.pdb $(DEFINES)
-INCPATH       = -I"..\..\OpenCV\opencv\build\include" -I"..\..\QT53\5.3\msvc2010_opengl\include" -I"..\..\QT53\5.3\msvc2010_opengl\include\QtOpenGL" -I"..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets" -I"..\..\QT53\5.3\msvc2010_opengl\include\QtGui" -I"..\..\QT53\5.3\msvc2010_opengl\include\QtCore" -I"debug" -I"." -I"..\..\QT53\5.3\msvc2010_opengl\mkspecs\win32-msvc2010"
+DEFINES       = -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG
+CFLAGS        = -nologo -Zm200 -Zc:wchar_t -O2 -MD -W3 $(DEFINES)
+CXXFLAGS      = -nologo -Zm200 -Zc:wchar_t -O2 -MD -GR -W3 -w34100 -w34189 -EHsc $(DEFINES)
+INCPATH       = -I"..\..\OpenCV\opencv\build\include" -I"..\..\QT53\5.3\msvc2010_opengl\include" -I"..\..\QT53\5.3\msvc2010_opengl\include\QtOpenGL" -I"..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets" -I"..\..\QT53\5.3\msvc2010_opengl\include\QtGui" -I"..\..\QT53\5.3\msvc2010_opengl\include\QtCore" -I"release" -I"." -I"..\..\QT53\5.3\msvc2010_opengl\mkspecs\win32-msvc2010"
 LINKER        = link
-LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /DEBUG /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
-LIBS          = glu32.lib opengl32.lib gdi32.lib user32.lib /LIBPATH:C:\QT53\5.3\msvc2010_opengl\lib C:\QT53\5.3\msvc2010_opengl\lib\qtmaind.lib /LIBPATH:C:\OpenCV\opencv\build\x86\vc10\lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_core249d.lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_highgui249d.lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_imgproc249d.lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_features2d249d.lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_calib3d249d.lib C:\QT53\5.3\msvc2010_opengl\lib\Qt5OpenGLd.lib C:\QT53\5.3\msvc2010_opengl\lib\Qt5Widgetsd.lib C:\QT53\5.3\msvc2010_opengl\lib\Qt5Guid.lib C:\QT53\5.3\msvc2010_opengl\lib\Qt5Cored.lib 
+LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /INCREMENTAL:NO /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
+LIBS          = glu32.lib opengl32.lib gdi32.lib user32.lib /LIBPATH:C:\QT53\5.3\msvc2010_opengl\lib C:\QT53\5.3\msvc2010_opengl\lib\qtmain.lib /LIBPATH:C:\OpenCV\opencv\build\x86\vc10\lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_core249d.lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_highgui249d.lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_imgproc249d.lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_features2d249d.lib C:\OpenCV\opencv\build\x86\vc10\lib\opencv_calib3d249d.lib C:\QT53\5.3\msvc2010_opengl\lib\Qt5OpenGL.lib C:\QT53\5.3\msvc2010_opengl\lib\Qt5Widgets.lib C:\QT53\5.3\msvc2010_opengl\lib\Qt5Gui.lib C:\QT53\5.3\msvc2010_opengl\lib\Qt5Core.lib 
 QMAKE         = C:\QT53\5.3\msvc2010_opengl\bin\qmake.exe
 IDC           = idc
 IDL           = midl
@@ -39,7 +39,7 @@ INSTALL_DIR     = $(COPY_DIR)
 
 ####### Output directory
 
-OBJECTS_DIR   = debug
+OBJECTS_DIR   = release
 
 ####### Files
 
@@ -58,129 +58,117 @@ SOURCES       = glwidget.cpp \
 		cubeObj.cpp \
 		emptyobj.cpp \
 		imageitem.cpp \
-		obj3dfactory.cpp debug\qrc_textures.cpp \
-		debug\moc_glwidget.cpp \
-		debug\moc_camera.cpp \
-		debug\moc_manager.cpp \
-		debug\moc_project.cpp \
-		debug\moc_mainwindow.cpp \
-		debug\moc_itemform.cpp \
-		debug\moc_projecttreeview.cpp \
-		debug\moc_treemodel.cpp
-OBJECTS       = debug\glwidget.obj \
-		debug\main.obj \
-		debug\camera.obj \
-		debug\pmatricies.obj \
-		debug\manager.obj \
-		debug\project.obj \
-		debug\mainwindow.obj \
-		debug\itemform.obj \
-		debug\projecttreeview.obj \
-		debug\treemodel.obj \
-		debug\objectItem.obj \
-		debug\quadObj.obj \
-		debug\cubeObj.obj \
-		debug\emptyobj.obj \
-		debug\imageitem.obj \
-		debug\obj3dfactory.obj \
-		debug\qrc_textures.obj \
-		debug\moc_glwidget.obj \
-		debug\moc_camera.obj \
-		debug\moc_manager.obj \
-		debug\moc_project.obj \
-		debug\moc_mainwindow.obj \
-		debug\moc_itemform.obj \
-		debug\moc_projecttreeview.obj \
-		debug\moc_treemodel.obj
+		obj3dfactory.cpp release\qrc_textures.cpp \
+		release\moc_glwidget.cpp \
+		release\moc_camera.cpp \
+		release\moc_manager.cpp \
+		release\moc_project.cpp \
+		release\moc_mainwindow.cpp \
+		release\moc_itemform.cpp \
+		release\moc_projecttreeview.cpp \
+		release\moc_treemodel.cpp
+OBJECTS       = release\glwidget.obj \
+		release\main.obj \
+		release\camera.obj \
+		release\pmatricies.obj \
+		release\manager.obj \
+		release\project.obj \
+		release\mainwindow.obj \
+		release\itemform.obj \
+		release\projecttreeview.obj \
+		release\treemodel.obj \
+		release\objectItem.obj \
+		release\quadObj.obj \
+		release\cubeObj.obj \
+		release\emptyobj.obj \
+		release\imageitem.obj \
+		release\obj3dfactory.obj \
+		release\qrc_textures.obj \
+		release\moc_glwidget.obj \
+		release\moc_camera.obj \
+		release\moc_manager.obj \
+		release\moc_project.obj \
+		release\moc_mainwindow.obj \
+		release\moc_itemform.obj \
+		release\moc_projecttreeview.obj \
+		release\moc_treemodel.obj
 
 DIST          = 
 QMAKE_TARGET  = textures
-DESTDIR        = debug\ #avoid trailing-slash linebreak
+DESTDIR        = release\ #avoid trailing-slash linebreak
 TARGET         = textures.exe
-DESTDIR_TARGET = debug\textures.exe
+DESTDIR_TARGET = release\textures.exe
 
 ####### Implicit rules
 
 .SUFFIXES: .c .cpp .cc .cxx
 
-{debug}.cpp{debug\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+{release}.cpp{release\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
 	$<
 <<
 
-{debug}.cc{debug\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+{release}.cc{release\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
 	$<
 <<
 
-{debug}.cxx{debug\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+{release}.cxx{release\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
 	$<
 <<
 
-{debug}.c{debug\}.obj::
-	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+{release}.c{release\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Forelease\ @<<
 	$<
 <<
 
-{.}.cpp{debug\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+{.}.cpp{release\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
 	$<
 <<
 
-{.}.cc{debug\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+{.}.cc{release\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
 	$<
 <<
 
-{.}.cxx{debug\}.obj::
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+{.}.cxx{release\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Forelease\ @<<
 	$<
 <<
 
-{.}.c{debug\}.obj::
-	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+{.}.c{release\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Forelease\ @<<
 	$<
 <<
 
 ####### Build rules
 
 first: all
-all: Makefile.Debug $(DESTDIR_TARGET)
+all: Makefile.Release $(DESTDIR_TARGET)
 
 $(DESTDIR_TARGET): ui_mainwindow.h ui_itemform.h $(OBJECTS) 
-	echo 1 /* CREATEPROCESS_MANIFEST_RESOURCE_ID */ 24 /* RT_MANIFEST */ "debug\\textures.exe.embed.manifest">debug\textures.exe_manifest.rc
-	if not exist $(DESTDIR_TARGET) if exist debug\textures.exe.embed.manifest del debug\textures.exe.embed.manifest
-	if exist debug\textures.exe.embed.manifest copy /Y debug\textures.exe.embed.manifest debug\textures.exe_manifest.bak
-	$(LINKER) $(LFLAGS) /MANIFEST /MANIFESTFILE:debug\textures.exe.embed.manifest /OUT:$(DESTDIR_TARGET) @<<
-$(OBJECTS) $(LIBS) 
-!IF EXIST(debug\textures.exe_manifest.res)
-debug\textures.exe_manifest.res
-!ENDIF
+	$(LINKER) $(LFLAGS) /MANIFEST /MANIFESTFILE:release\textures.exe.embed.manifest /OUT:$(DESTDIR_TARGET) @<<
+$(OBJECTS) $(LIBS)
 <<
-	if exist debug\textures.exe_manifest.bak fc /b debug\textures.exe.embed.manifest debug\textures.exe_manifest.bak >NUL || del debug\textures.exe_manifest.bak
-	if not exist debug\textures.exe_manifest.bak rc.exe /fodebug\textures.exe_manifest.res debug\textures.exe_manifest.rc
-	if not exist debug\textures.exe_manifest.bak $(LINKER) $(LFLAGS) /MANIFEST /MANIFESTFILE:debug\textures.exe.embed.manifest /OUT:$(DESTDIR_TARGET) @<<
-$(OBJECTS) $(LIBS) debug\textures.exe_manifest.res
-<<
-	if exist debug\textures.exe_manifest.bak del debug\textures.exe_manifest.bak
+	mt.exe /nologo /manifest release\textures.exe.embed.manifest /outputresource:$(DESTDIR_TARGET);1
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-msvc2010 CONFIG+=debug -o Makefile.Debug textures.pro
+	@$(QMAKE) -spec win32-msvc2010 CONFIG+=debug -o Makefile.Release textures.pro
 
 qmake_all: FORCE
 
 dist:
-	$(ZIP) textures.zip $(SOURCES) $(DIST) textures.pro ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\spec_pre.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\common\shell-win32.conf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\qconfig.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axbase.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axbase_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axcontainer.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axcontainer_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axserver.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axserver_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_bluetooth.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_bluetooth_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_bootstrap_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_clucene_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_concurrent.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_concurrent_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_core.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_core_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_declarative.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_declarative_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_designer.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_designer_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_designercomponents_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_enginio.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_enginio_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_gui.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_gui_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_help.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_help_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_multimedia.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_multimedia_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_multimediawidgets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_multimediawidgets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_network.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_network_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_nfc.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_nfc_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_opengl.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_opengl_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_openglextensions.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_openglextensions_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_platformsupport_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_positioning.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_positioning_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_printsupport.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_printsupport_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qml.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qml_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qmldevtools_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qmltest.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qmltest_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quick.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quick_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quickparticles_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quickwidgets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quickwidgets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_script.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_script_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_scripttools.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_scripttools_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_sensors.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_sensors_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_serialport.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_serialport_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_sql.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_sql_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_svg.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_svg_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_testlib.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_testlib_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_uitools.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_uitools_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_webkit.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_webkit_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_webkitwidgets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_webkitwidgets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_websockets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_websockets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_widgets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_widgets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_winextras.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_winextras_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_xml.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_xml_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_xmlpatterns.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_xmlpatterns_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\qt_functions.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\qt_config.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\qt_config.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\win32-msvc2010\qmake.conf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\spec_post.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\exclusive_builds.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\default_pre.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\default_pre.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\resolve_config.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\exclusive_builds_post.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\default_post.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\build_pass.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\rtti.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\precompile_header.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\warn_on.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\qt.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\resources.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\moc.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\opengl.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\uic.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\windows.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\testcase_targets.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\exceptions.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\yacc.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\lex.prf textures.pro textures.qrc C:/QT53/5.3/msvc2010_opengl/lib/qtmaind.prl C:/QT53/5.3/msvc2010_opengl/lib/Qt5Cored.prl C:/QT53/5.3/msvc2010_opengl/lib/Qt5OpenGLd.prl C:/QT53/5.3/msvc2010_opengl/lib/Qt5Widgetsd.prl C:/QT53/5.3/msvc2010_opengl/lib/Qt5Guid.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
+	$(ZIP) textures.zip $(SOURCES) $(DIST) textures.pro ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\spec_pre.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\common\shell-win32.conf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\qconfig.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axbase.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axbase_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axcontainer.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axcontainer_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axserver.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_axserver_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_bluetooth.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_bluetooth_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_bootstrap_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_clucene_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_concurrent.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_concurrent_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_core.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_core_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_declarative.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_declarative_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_designer.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_designer_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_designercomponents_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_enginio.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_enginio_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_gui.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_gui_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_help.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_help_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_multimedia.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_multimedia_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_multimediawidgets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_multimediawidgets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_network.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_network_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_nfc.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_nfc_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_opengl.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_opengl_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_openglextensions.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_openglextensions_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_platformsupport_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_positioning.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_positioning_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_printsupport.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_printsupport_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qml.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qml_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qmldevtools_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qmltest.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qmltest_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quick.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quick_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quickparticles_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quickwidgets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_quickwidgets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_script.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_script_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_scripttools.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_scripttools_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_sensors.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_sensors_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_serialport.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_serialport_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_sql.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_sql_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_svg.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_svg_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_testlib.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_testlib_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_uitools.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_uitools_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_webkit.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_webkit_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_webkitwidgets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_webkitwidgets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_websockets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_websockets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_widgets.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_widgets_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_winextras.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_winextras_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_xml.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_xml_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_xmlpatterns.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\modules\qt_lib_xmlpatterns_private.pri ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\qt_functions.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\qt_config.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\qt_config.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\win32-msvc2010\qmake.conf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\spec_post.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\exclusive_builds.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\default_pre.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\default_pre.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\resolve_config.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\exclusive_builds_post.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\default_post.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\build_pass.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\rtti.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\precompile_header.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\warn_on.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\qt.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\resources.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\moc.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\opengl.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\uic.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\win32\windows.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\testcase_targets.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\exceptions.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\yacc.prf ..\..\QT53\5.3\msvc2010_opengl\mkspecs\features\lex.prf textures.pro textures.qrc C:/QT53/5.3/msvc2010_opengl/lib/qtmain.prl C:/QT53/5.3/msvc2010_opengl/lib/Qt5Core.prl C:/QT53/5.3/msvc2010_opengl/lib/Qt5OpenGL.prl C:/QT53/5.3/msvc2010_opengl/lib/Qt5Widgets.prl C:/QT53/5.3/msvc2010_opengl/lib/Qt5Gui.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) debug\glwidget.obj debug\main.obj debug\camera.obj debug\pmatricies.obj debug\manager.obj debug\project.obj debug\mainwindow.obj debug\itemform.obj debug\projecttreeview.obj debug\treemodel.obj debug\objectItem.obj debug\quadObj.obj debug\cubeObj.obj debug\emptyobj.obj debug\imageitem.obj debug\obj3dfactory.obj debug\qrc_textures.obj debug\moc_glwidget.obj debug\moc_camera.obj debug\moc_manager.obj debug\moc_project.obj debug\moc_mainwindow.obj debug\moc_itemform.obj debug\moc_projecttreeview.obj debug\moc_treemodel.obj
-	-$(DEL_FILE) debug\textures.exp debug\textures.ilk debug\textures.idb debug\textures.exe.embed.manifest debug\textures.exe_manifest.rc debug\textures.exe_manifest.res
+	-$(DEL_FILE) release\glwidget.obj release\main.obj release\camera.obj release\pmatricies.obj release\manager.obj release\project.obj release\mainwindow.obj release\itemform.obj release\projecttreeview.obj release\treemodel.obj release\objectItem.obj release\quadObj.obj release\cubeObj.obj release\emptyobj.obj release\imageitem.obj release\obj3dfactory.obj release\qrc_textures.obj release\moc_glwidget.obj release\moc_camera.obj release\moc_manager.obj release\moc_project.obj release\moc_mainwindow.obj release\moc_itemform.obj release\moc_projecttreeview.obj release\moc_treemodel.obj
+	-$(DEL_FILE) release\textures.exp release\textures.exe.embed.manifest
 
 distclean: clean 
-	-$(DEL_FILE) debug\textures.pdb
 	-$(DEL_FILE) $(DESTDIR_TARGET)
-	-$(DEL_FILE) Makefile.Debug
+	-$(DEL_FILE) Makefile.Release
 
 mocclean: compiler_moc_header_clean compiler_moc_source_clean
 
@@ -190,22 +178,22 @@ check: first
 
 compiler_no_pch_compiler_make_all:
 compiler_no_pch_compiler_clean:
-compiler_rcc_make_all: debug\qrc_textures.cpp
+compiler_rcc_make_all: release\qrc_textures.cpp
 compiler_rcc_clean:
-	-$(DEL_FILE) debug\qrc_textures.cpp
-debug\qrc_textures.cpp: textures.qrc \
+	-$(DEL_FILE) release\qrc_textures.cpp
+release\qrc_textures.cpp: textures.qrc \
 		images\side1.png \
 		images\side5.png \
 		images\side4.png \
 		images\side3.png \
 		images\side2.png \
 		images\side6.png
-	C:\QT53\5.3\msvc2010_opengl\bin\rcc.exe -name textures textures.qrc -o debug\qrc_textures.cpp
+	C:\QT53\5.3\msvc2010_opengl\bin\rcc.exe -name textures textures.qrc -o release\qrc_textures.cpp
 
-compiler_moc_header_make_all: debug\moc_glwidget.cpp debug\moc_camera.cpp debug\moc_manager.cpp debug\moc_project.cpp debug\moc_mainwindow.cpp debug\moc_itemform.cpp debug\moc_projecttreeview.cpp debug\moc_treemodel.cpp
+compiler_moc_header_make_all: release\moc_glwidget.cpp release\moc_camera.cpp release\moc_manager.cpp release\moc_project.cpp release\moc_mainwindow.cpp release\moc_itemform.cpp release\moc_projecttreeview.cpp release\moc_treemodel.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) debug\moc_glwidget.cpp debug\moc_camera.cpp debug\moc_manager.cpp debug\moc_project.cpp debug\moc_mainwindow.cpp debug\moc_itemform.cpp debug\moc_projecttreeview.cpp debug\moc_treemodel.cpp
-debug\moc_glwidget.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QtWidgets \
+	-$(DEL_FILE) release\moc_glwidget.cpp release\moc_camera.cpp release\moc_manager.cpp release\moc_project.cpp release\moc_mainwindow.cpp release\moc_itemform.cpp release\moc_projecttreeview.cpp release\moc_treemodel.cpp
+release\moc_glwidget.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QtWidgets \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QtWidgetsDepends \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QtCore \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QtCoreDepends \
@@ -640,9 +628,9 @@ debug\moc_glwidget.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QtWidge
 		..\..\QT53\5.3\msvc2010_opengl\include\QtOpenGL\qtopenglglobal.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\QOpenGLFunctions \
 		glwidget.h
-	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore glwidget.h -o debug\moc_glwidget.cpp
+	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore glwidget.h -o release\moc_glwidget.cpp
 
-debug\moc_camera.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtGui\QVector3D \
+release\moc_camera.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtGui\QVector3D \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qvector3d.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qpoint.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qnamespace.h \
@@ -718,9 +706,9 @@ debug\moc_camera.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtGui\QVector3D \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qmargins.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qsize.h \
 		camera.h
-	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore camera.h -o debug\moc_camera.cpp
+	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore camera.h -o release\moc_camera.cpp
 
-debug\moc_manager.cpp: camera.h \
+release\moc_manager.cpp: camera.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\QVector3D \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qvector3d.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qpoint.h \
@@ -811,9 +799,9 @@ debug\moc_manager.cpp: camera.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qabstractitemmodel.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QObject \
 		manager.h
-	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore manager.h -o debug\moc_manager.cpp
+	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore manager.h -o release\moc_manager.cpp
 
-debug\moc_project.cpp: ..\..\OpenCV\opencv\build\include\opencv\highgui.h \
+release\moc_project.cpp: ..\..\OpenCV\opencv\build\include\opencv\highgui.h \
 		..\..\OpenCV\opencv\build\include\opencv2\core\core_c.h \
 		..\..\OpenCV\opencv\build\include\opencv2\core\types_c.h \
 		..\..\OpenCV\opencv\build\include\opencv2\core\core.hpp \
@@ -894,9 +882,9 @@ debug\moc_project.cpp: ..\..\OpenCV\opencv\build\include\opencv\highgui.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qstringmatcher.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QObject \
 		project.h
-	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore project.h -o debug\moc_project.cpp
+	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore project.h -o release\moc_project.cpp
 
-debug\moc_mainwindow.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QMainWindow \
+release\moc_mainwindow.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QMainWindow \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qmainwindow.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qwidget.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qwindowdefs.h \
@@ -1004,9 +992,9 @@ debug\moc_mainwindow.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QMain
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qscrollbar.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qabstractslider.h \
 		mainwindow.h
-	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore mainwindow.h -o debug\moc_mainwindow.cpp
+	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore mainwindow.h -o release\moc_mainwindow.cpp
 
-debug\moc_itemform.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QWidget \
+release\moc_itemform.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QWidget \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qwidget.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qwindowdefs.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qglobal.h \
@@ -1107,9 +1095,9 @@ debug\moc_itemform.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QWidget
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qvector2d.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qtouchdevice.h \
 		itemform.h
-	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore itemform.h -o debug\moc_itemform.cpp
+	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore itemform.h -o release\moc_itemform.cpp
 
-debug\moc_projecttreeview.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QObject \
+release\moc_projecttreeview.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QObject \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qobject.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qobjectdefs.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qnamespace.h \
@@ -1229,9 +1217,9 @@ debug\moc_projecttreeview.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QOb
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qtabwidget.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qrubberband.h \
 		projecttreeview.h
-	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore projecttreeview.h -o debug\moc_projecttreeview.cpp
+	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore projecttreeview.h -o release\moc_projecttreeview.cpp
 
-debug\moc_treemodel.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QAbstractItemModel \
+release\moc_treemodel.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QAbstractItemModel \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qabstractitemmodel.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qvariant.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qatomic.h \
@@ -1301,7 +1289,7 @@ debug\moc_treemodel.cpp: ..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QAbstract
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QModelIndex \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QVariant \
 		treemodel.h
-	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore treemodel.h -o debug\moc_treemodel.cpp
+	C:\QT53\5.3\msvc2010_opengl\bin\moc.exe $(DEFINES) -D_MSC_VER=1600 -D_WIN32 -IC:/QT53/5.3/msvc2010_opengl/mkspecs/win32-msvc2010 -IC:/Github/2to3d -IC:/OpenCV/opencv/build/include -IC:/QT53/5.3/msvc2010_opengl/include -IC:/QT53/5.3/msvc2010_opengl/include/QtOpenGL -IC:/QT53/5.3/msvc2010_opengl/include/QtWidgets -IC:/QT53/5.3/msvc2010_opengl/include/QtGui -IC:/QT53/5.3/msvc2010_opengl/include/QtCore treemodel.h -o release\moc_treemodel.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1326,7 +1314,7 @@ compiler_clean: compiler_rcc_clean compiler_moc_header_clean compiler_uic_clean
 
 ####### Compile
 
-debug\glwidget.obj: glwidget.cpp ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QtWidgets \
+release\glwidget.obj: glwidget.cpp ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QtWidgets \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QtWidgetsDepends \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QtCore \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QtCoreDepends \
@@ -1785,7 +1773,7 @@ debug\glwidget.obj: glwidget.cpp ..\..\QT53\5.3\msvc2010_opengl\include\QtWidget
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\Qvector \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QModelIndex
 
-debug\main.obj: main.cpp ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QApplication \
+release\main.obj: main.cpp ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QApplication \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qapplication.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qcoreapplication.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qglobal.h \
@@ -1925,7 +1913,7 @@ debug\main.obj: main.cpp ..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QAppli
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qabstractitemmodel.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QObject
 
-debug\camera.obj: camera.cpp camera.h \
+release\camera.obj: camera.cpp camera.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\QVector3D \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qvector3d.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qpoint.h \
@@ -2014,7 +2002,7 @@ debug\camera.obj: camera.cpp camera.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qvector2d.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qtouchdevice.h
 
-debug\pmatricies.obj: pmatricies.cpp pmatricies.h \
+release\pmatricies.obj: pmatricies.cpp pmatricies.h \
 		..\..\OpenCV\opencv\build\include\opencv2\opencv.hpp \
 		..\..\OpenCV\opencv\build\include\opencv2\core\core_c.h \
 		..\..\OpenCV\opencv\build\include\opencv2\core\types_c.h \
@@ -2043,7 +2031,7 @@ debug\pmatricies.obj: pmatricies.cpp pmatricies.h \
 		..\..\OpenCV\opencv\build\include\opencv2\contrib\retina.hpp \
 		..\..\OpenCV\opencv\build\include\opencv2\contrib\openfabmap.hpp
 
-debug\manager.obj: manager.cpp manager.h \
+release\manager.obj: manager.cpp manager.h \
 		camera.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\QVector3D \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qvector3d.h \
@@ -2195,7 +2183,7 @@ debug\manager.obj: manager.cpp manager.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QVector \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QEvent
 
-debug\project.obj: project.cpp ..\..\OpenCV\opencv\build\include\opencv2\highgui\highgui.hpp \
+release\project.obj: project.cpp ..\..\OpenCV\opencv\build\include\opencv2\highgui\highgui.hpp \
 		..\..\OpenCV\opencv\build\include\opencv2\core\core.hpp \
 		..\..\OpenCV\opencv\build\include\opencv2\core\types_c.h \
 		..\..\OpenCV\opencv\build\include\opencv2\core\version.hpp \
@@ -2672,7 +2660,7 @@ debug\project.obj: project.cpp ..\..\OpenCV\opencv\build\include\opencv2\highgui
 		quadObj.h \
 		emptyobj.h
 
-debug\mainwindow.obj: mainwindow.cpp mainwindow.h \
+release\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QMainWindow \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qmainwindow.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qwidget.h \
@@ -3147,7 +3135,7 @@ debug\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		treemodel.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QAbstractItemModel
 
-debug\itemform.obj: itemform.cpp itemform.h \
+release\itemform.obj: itemform.cpp itemform.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QWidget \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\qwidget.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\qwindowdefs.h \
@@ -3323,7 +3311,7 @@ debug\itemform.obj: itemform.cpp itemform.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QModelIndex \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QObject
 
-debug\projecttreeview.obj: projecttreeview.cpp projecttreeview.h \
+release\projecttreeview.obj: projecttreeview.cpp projecttreeview.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QObject \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qobject.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qobjectdefs.h \
@@ -3478,7 +3466,7 @@ debug\projecttreeview.obj: projecttreeview.cpp projecttreeview.h \
 		treemodel.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QAbstractItemModel
 
-debug\treemodel.obj: treemodel.cpp treemodel.h \
+release\treemodel.obj: treemodel.cpp treemodel.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QAbstractItemModel \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qabstractitemmodel.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qvariant.h \
@@ -3934,7 +3922,7 @@ debug\treemodel.obj: treemodel.cpp treemodel.h \
 		objectItem.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QDebug
 
-debug\objectItem.obj: objectItem.cpp objectItem.h \
+release\objectItem.obj: objectItem.cpp objectItem.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QList \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qlist.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qalgorithms.h \
@@ -4012,7 +4000,7 @@ debug\objectItem.obj: objectItem.cpp objectItem.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qmargins.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qsize.h
 
-debug\quadObj.obj: quadObj.cpp ..\..\OpenCV\opencv\build\include\opencv2\highgui\highgui.hpp \
+release\quadObj.obj: quadObj.cpp ..\..\OpenCV\opencv\build\include\opencv2\highgui\highgui.hpp \
 		..\..\OpenCV\opencv\build\include\opencv2\core\core.hpp \
 		..\..\OpenCV\opencv\build\include\opencv2\core\types_c.h \
 		..\..\OpenCV\opencv\build\include\opencv2\core\version.hpp \
@@ -4480,7 +4468,7 @@ debug\quadObj.obj: quadObj.cpp ..\..\OpenCV\opencv\build\include\opencv2\highgui
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QScrollBar \
 		quadObj.h
 
-debug\cubeObj.obj: cubeObj.cpp ..\..\OpenCV\opencv\build\include\opencv2\highgui\highgui.hpp \
+release\cubeObj.obj: cubeObj.cpp ..\..\OpenCV\opencv\build\include\opencv2\highgui\highgui.hpp \
 		..\..\OpenCV\opencv\build\include\opencv2\core\core.hpp \
 		..\..\OpenCV\opencv\build\include\opencv2\core\types_c.h \
 		..\..\OpenCV\opencv\build\include\opencv2\core\version.hpp \
@@ -4941,7 +4929,7 @@ debug\cubeObj.obj: cubeObj.cpp ..\..\OpenCV\opencv\build\include\opencv2\highgui
 		camera.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtOpenGL\qglshaderprogram.h
 
-debug\emptyobj.obj: emptyobj.cpp emptyobj.h \
+release\emptyobj.obj: emptyobj.cpp emptyobj.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QVector \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qvector.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qalgorithms.h \
@@ -5408,7 +5396,7 @@ debug\emptyobj.obj: emptyobj.cpp emptyobj.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QWidget \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtWidgets\QScrollBar
 
-debug\imageitem.obj: imageitem.cpp imageitem.h \
+release\imageitem.obj: imageitem.cpp imageitem.h \
 		objectItem.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QList \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qlist.h \
@@ -5863,7 +5851,7 @@ debug\imageitem.obj: imageitem.cpp imageitem.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtGui\QOpenGLFunctions \
 		manager.h
 
-debug\obj3dfactory.obj: obj3dfactory.cpp obj3dfactory.h \
+release\obj3dfactory.obj: obj3dfactory.cpp obj3dfactory.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\QString \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qstring.h \
 		..\..\QT53\5.3\msvc2010_opengl\include\QtCore\qchar.h \
@@ -6320,23 +6308,23 @@ debug\obj3dfactory.obj: obj3dfactory.cpp obj3dfactory.h \
 		imageitem.h \
 		camera.h
 
-debug\qrc_textures.obj: debug\qrc_textures.cpp 
+release\qrc_textures.obj: release\qrc_textures.cpp 
 
-debug\moc_glwidget.obj: debug\moc_glwidget.cpp 
+release\moc_glwidget.obj: release\moc_glwidget.cpp 
 
-debug\moc_camera.obj: debug\moc_camera.cpp 
+release\moc_camera.obj: release\moc_camera.cpp 
 
-debug\moc_manager.obj: debug\moc_manager.cpp 
+release\moc_manager.obj: release\moc_manager.cpp 
 
-debug\moc_project.obj: debug\moc_project.cpp 
+release\moc_project.obj: release\moc_project.cpp 
 
-debug\moc_mainwindow.obj: debug\moc_mainwindow.cpp 
+release\moc_mainwindow.obj: release\moc_mainwindow.cpp 
 
-debug\moc_itemform.obj: debug\moc_itemform.cpp 
+release\moc_itemform.obj: release\moc_itemform.cpp 
 
-debug\moc_projecttreeview.obj: debug\moc_projecttreeview.cpp 
+release\moc_projecttreeview.obj: release\moc_projecttreeview.cpp 
 
-debug\moc_treemodel.obj: debug\moc_treemodel.cpp 
+release\moc_treemodel.obj: release\moc_treemodel.cpp 
 
 ####### Install
 

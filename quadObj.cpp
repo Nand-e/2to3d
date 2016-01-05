@@ -78,7 +78,7 @@ void QuadObj::takeTexture() {
     bool notroot = true;
     while ( notroot ) {
 
-        if ( po != manager->mainproject->objectRoot ) {
+        if ( po != pro.objectRoot ) {
             mats.push( po->getMatrix() );
            // qDebug() << po->m_itemData;
             po = (QuadObj * ) po->parentItem();
@@ -89,7 +89,7 @@ void QuadObj::takeTexture() {
         }
     }
 
-    cmat = manager->fixCamera->getMatrix();
+    // cmat = manager->fixCamera->getMatrix(); TODO
     for ( int i=0 , e = mats.size(); i < e ; i ++ ) {
         cmat *= mats.top();
         mats.pop();
@@ -118,7 +118,7 @@ void QuadObj::takeTexture() {
     ocoords[3] = cv::Point2f (w, 0);
     //
     cv::Point2f textpoint[4];
-    UvtoCvCoordinate(manager->mainproject->actualBackground, textpoint);
+  //  UvtoCvCoordinate(manager->mainproject->actualBackground, textpoint);
 
   /*  for ( int i = 0; i < 4; i++) {
         qDebug() << textpoint[i].x << " : " << textpoint[i].y;
@@ -133,9 +133,10 @@ void QuadObj::takeTexture() {
 
     cv::Mat ptransform = getPerspectiveTransform ( textpoint, ocoords);
   //  cv::Mat transmtx = cv::getPerspectiveTransform(corners, quad_pts);
-    cv::warpPerspective( *manager->mainproject->actualBackground, *textureMat, ptransform,  textureMat->size() );
+ //   cv::warpPerspective( *manager->mainproject->actualBackground, *textureMat, ptransform,  textureMat->size() );
 
-    GLWidget & gl = manager->getMainGLW();
+
+    GLWidget & gl = pro.getManger().getMainGLW();
     if ( textureID == 0 ) {
         gl.glGenBuffers( 1, &textureID);
     }
@@ -174,7 +175,7 @@ void QuadObj::drawgl(GLWidget &gl, QMatrix4x4 & cameramat  ) {
 
     QGLShaderProgram * sp = gl.program;
 
-    if ( manager->mainproject->actualobject == this ) {
+    if (  pro.actualobject == this ) {
         sp = gl.program2;
     }
 
@@ -189,7 +190,7 @@ void QuadObj::drawgl(GLWidget &gl, QMatrix4x4 & cameramat  ) {
     gl.glBindTexture(GL_TEXTURE_2D, this->textureID );
     gl.glDrawArrays(GL_QUADS, 0, 4 );
 
-    if ( manager->edges ) {
+    if ( pro.getManger().edges ) {
         gl.glDisable(GL_CULL_FACE);
         sp = gl.solidcolorp;
 
@@ -201,7 +202,7 @@ void QuadObj::drawgl(GLWidget &gl, QMatrix4x4 & cameramat  ) {
         sp->setUniformValue("matrix", mobj);
         sp->setUniformValue("color", QVector4D (0,1,0,0.8f));
 
-        if ( manager->mainproject->actualobject == this ) {
+        if ( pro.actualobject == this ) {
             sp->setUniformValue("color", QVector4D (1,0.8f,1,0.8f));
         }
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

@@ -1,6 +1,5 @@
 HEADERS       = glwidget.h \
     camera.h \
-    Globals.h \
     pmatricies.h \
     manager.h \
     project.h \

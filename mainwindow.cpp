@@ -31,7 +31,7 @@ MainWindow::MainWindow(Manager & man1, QWidget *parent) :
 
     scroll->setValue( man.freeCamera->getViewAngle());
     connect(scroll, SIGNAL(valueChanged(int)), man.freeCamera , SLOT(setViewAngle(int)) );
-    connect(scroll, SIGNAL(valueChanged(int)), man.fixCamera , SLOT(setViewAngle(int)) );
+    connect(scroll, SIGNAL(valueChanged(int)), man.mainproject , SLOT(setViewAngle(int)) );
     connect(scroll, SIGNAL(valueChanged(int)), ui->lcdNumber, SLOT(display(int)));
 
     timer->start(20);
@@ -50,7 +50,7 @@ GLWidget & MainWindow::getMainGLW() {
 
 void MainWindow::on_pushButton_clicked()
 {
-   man.mainproject->loadBackground(*this->mainGLW);
+  // man.mainproject->loadBackground(*this->mainGLW);
 }
 
 void MainWindow::on_radioButton_clicked()
@@ -63,15 +63,12 @@ void MainWindow::on_radioButton_2_clicked()
     man.keycontrol = man.ItemControl;
 }
 
-void MainWindow::on_pushButton_2_clicked()
-{
-    man.actualCamera = man.fixCamera;
-}
 
 
 void MainWindow::on_actionSave_Project_triggered()
 {
-    man.mainproject->saveToFile();
+  QString fileName = QFileDialog::getSaveFileName(this, 0 ,tr ("Project File *.txt") );
+  man.mainproject->saveToFile( fileName);
 }
 
 void MainWindow::on_radioButton_5_clicked()
@@ -90,18 +87,30 @@ void MainWindow::on_actionNew_project_triggered() {
 
 void MainWindow::on_actionLoad_Project_triggered()
 {
-    man.mainproject->loadFile();
+
+    QString fileName = QFileDialog::getOpenFileName(this,
+                              tr("Open Project"), "Projects", tr("Project file (*.txt)"));
+    man.mainproject->loadFile( fileName);
+
 }
 
 // Select free camera
 void MainWindow::on_toolButton_2_clicked()
 {
-     man.actualCamera = man.freeCamera;
-     man.keycontrol = man.CameraControl;
+     man.mainproject->setFreecam( true );
+    // man.actualCamera = man.freeCamera;
+     man.keycontrol   = man.CameraControl;
+
      ui->radioButton_2->setChecked( true );
+}
+
+// deselect free cam
+void MainWindow::on_pushButton_2_clicked()
+{
+    man.mainproject->setFreecam( false );
 }
 
 void MainWindow::on_Resetfreecamera_clicked()
 {
-    * man.freeCamera = *man.fixCamera;
+    * man.freeCamera = *man.actualCamera;  //
 }

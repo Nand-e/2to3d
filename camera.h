@@ -19,7 +19,7 @@ public:
     void LeftRight (float sx );
     void RotY ( float dt );
     void RotX ( float dt );
-    const QMatrix4x4 & getMatrix();
+    const QMatrix4x4 & getMatrix(float aspect);
 
 public slots:
     void setViewAngle ( int  va );

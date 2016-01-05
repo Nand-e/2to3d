@@ -4,6 +4,7 @@
 
 #include "quadObj.h"
 #include "cubeObj.h"
+#include "imageitem.h"
 
 Obj3dFactory::Obj3dFactory( Project * pro1)
 {
@@ -13,18 +14,31 @@ Obj3dFactory::Obj3dFactory( Project * pro1)
 
 }
 
-ObjectItem * Obj3dFactory::createObj3d(QString &str, ObjectItem * parent ) {
-   if ( pro != 0 ) {
+ObjectItem * Obj3dFactory::createObj3d(QString &type, ObjectItem * parent, QString & name, QString & data ) {
+
+   if ( pro == 0 ) {
      qDebug() << "Error: The Factory not inited!" ;
    }
-   if ( str.compare("QUAD") ) {
+
+
+   if ( type.compare("IMAGE") == 0 ) {
+       qDebug() << "Image created" ;
+       return new ImageItem ( name, data , parent, * pro );
+
+   }
+
+   if ( type.compare("QUAD") == 0 ) {
+        qDebug() << "QUAD created" ;
         return new QuadObj ( QString ("quad"), parent , *pro );
+
    }
-   if ( str.compare("CUBE") ) {
+   if ( type.compare("CUBE") == 0 ) {
+        qDebug() << "CUBE created" ;
         return new CubeObj ( QString ("cube" ), parent , *pro );
+
    }
 
-
+   return 0;
 }
 QVector<QString> & Obj3dFactory::classNames() {
     return names;

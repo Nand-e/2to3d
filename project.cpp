@@ -16,7 +16,7 @@
 #include "projecttreeview.h"
 #include "manager.h"
 
-
+#include "obj3dfactory.h"
 #include "imageitem.h"
 #include "cubeObj.h"
 #include "quadObj.h"
@@ -25,19 +25,19 @@
 #define PROGRAM_TEXCOORD_ATTRIBUTE 1
 
 
-Project::Project(Manager & m) : man (m)
+Project::Project(Manager & m) :
+    man (m),
+    container ( new TreeModel( 0 , this ) )          // store Items such as pictures, 3d objects etc
 {   
     renderEnable = false;
-    container =  new TreeModel( 0 , this );         // Store the objct3d object and the other project specifc data
+
     createRoots();
 
-    imagesRoot->appendChild(new ImageItem ("Image-1" , "grid.png", imagesRoot ));
-    dynamic_cast<ImageItem*> ( imagesRoot->child(0) ) -> initPicture ();
-
-    actualBackground =     & ( dynamic_cast<ImageItem*> ( imagesRoot->child(0) ) ->picture ) ;
+    man.actualCamera  =  dynamic_cast<ImageItem*> ( imagesRoot )->getCamera();
 
     actualobject = 0;
-    backtextID = 0;
+    actualImage  = dynamic_cast<ImageItem * > (imagesRoot);
+
 
     ObjectItem * op;
     for ( int i =0; i < 3; i++ ) {
@@ -46,33 +46,33 @@ Project::Project(Manager & m) : man (m)
         objectRoot->appendChild( op);
     }
 
-    for ( int i =0; i < 8; i++ ) {
+    for ( int i =0; i < 3; i++ ) {
         op = new CubeObj (QString("object2") + QString::number(i+1) , objectRoot->child(2), *this);
         op->step(QVector3D ( 1 + i * 1.25f , 0 , -2 ));
         objectRoot->child(2)->appendChild(op);
     }
 
 
-    for ( int i =0; i < 5; i++ ) {
+    for ( int i =0; i < 3; i++ ) {
         op = new QuadObj (QString("object2") + QString::number(i+1) , objectRoot->child(2), *this);
         op->step(QVector3D ( 4 + i * 1.25f , 0 , -2 ));
         objectRoot->child(2)->appendChild(op);
     }
-
-
-
     man.ptreeview->setModel( container );
-
 }
 
 Project::~Project()
 {
     delete container;
-
 }
 
 Manager & Project::getManger() {
     return man;
+}
+
+void Project::aspectChanged( float aspect) {
+   viewportAspect = aspect;
+   qDebug()<< "AspectRatio:" << viewportAspect;
 }
 
 /*
@@ -80,73 +80,173 @@ Manager & Project::getManger() {
  * * ************************************/
 void Project::createRoots() {
 
-    imagesRoot = new ImageItem ( "Pictures", "Root", container->getRoot() );
+    imagesRoot = new ImageItem ( "Pictures", "grid.png", container->getRoot(), *this );
     container->getRoot()->appendChild( imagesRoot );  
-
-    container->getRoot()->appendChild( new QuadObj ( "Objects", container->getRoot() , * this  ));
-
+    container->getRoot()->appendChild( new CubeObj ( "Objects", container->getRoot() , * this  ));
     actualobject = (QuadObj *) container->getRoot()->child(1);
     objectRoot   = (QuadObj *) container->getRoot()->child(1);
 
 }
 
+void Project::addImage( ) {
+
+    QString fileName = QFileDialog::getOpenFileName(0 , tr("Open Image"), "Image", tr("Image (*.jpg)"));
+
+    ObjectItem * image = Obj3dFactory::createObj3d( QString ("IMAGE"), imagesRoot, fileName, fileName);
+    if ( static_cast<ImageItem * > (image)->initPicture() == true  ) {
+         container->addObject( image );
+
+    } else {
+         delete image;
+    }
+
+}
+
+void Project::addObject(ObjectItem *newItem ) {
+    container->addObject ( newItem  );
+}
+
+/*
+ * Delete object from data modell
+ * ********************************************************************/
+void Project::deleteObject(ObjectItem *item) {
+    if ( item == objectRoot || item == imagesRoot ) {
+        qDebug() << "you are not allowd to delete root items!";
+        return;
+    }
+
+    if ( item->getType().compare("IMAGE") == 0) {          // Ha a t0relnendő elem kép
+        if ( actualImage == item ) actualImage = 0;
+    } else {
+        if ( item == actualobject ) actualobject = 0;
+    }
+    container->deleteObject( item );
+}
+
+
+
 void Project::treeCliked(QModelIndex index){
     //qDebug() << index;
-    actualobject = ( ObjectItem*) (index.internalPointer() );
-    man.mainwindow->itemform->updateData( );
-    man.keycontrol = Manager::ItemControl;
+
+    ObjectItem * p = ( ObjectItem*) (index.internalPointer() );
+    qDebug() << p->getType().c_str();
+    if ( p->getType().compare("IMAGE") == 0 )
+    {
+      actualImage  =  static_cast<ImageItem*> ( p );
+
+    } else {
+        actualobject = p;
+        man.mainwindow->itemform->updateData( );
+        man.keycontrol = Manager::ItemControl;
+    }
     //qDebug() << actualobject;
 }
 void Project::initGlpart(GLWidget &gl )
 {
-    loadBackground( gl , imagename );
+    dynamic_cast<ImageItem*> ( imagesRoot ) ->initPicture();
+    //dynamic_cast<ImageItem*> ( imagesRoot->child(0) ) -> initPicture ();
 
-    faceVertex.append ( QVector3D ( -1 , 1 , 0 ));        // Make face
-    faceVertex.append ( QVector3D ( -1 ,-1 , 0 ));
-    faceVertex.append ( QVector3D (  1 ,-1 , 0 ));
-    faceVertex.append ( QVector3D (  1 , 1 , 0 ));
-
-    faceTex.append ( QVector2D ( 0,0) );                  // Set Texture coordinate
-    faceTex.append ( QVector2D ( 0,1) );
-    faceTex.append ( QVector2D ( 1,1) );
-    faceTex.append ( QVector2D ( 1,0) );
     renderEnable = true;
 }
 
 /*
- *
- *
  * **********************************************/
 void Project::drawBackground (GLWidget &gl)
 {
 
     if ( man.actualCamera == man.freeCamera) return;
-
+    if ( actualImage == 0 ) return;
     QMatrix4x4 m;
-    m.ortho( -1,1, -1, 1, -100, 500 );
+    m.ortho( - 1 * viewportAspect , 1 * viewportAspect , -1, 1, -100, 500 );
     m.translate(0,0,-499);
-    m.scale( 1, 1, 1 );
+    m.scale( 1.0f , 1.0f , 1 );
     QColor color (0,1,1,0.5f);
+
     gl.program->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
     gl.program->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
-    gl.program->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, faceVertex.constData());
-    gl.program->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, faceTex.constData());
+    gl.program->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE  , actualImage->faceVertex.constData());
+    gl.program->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, actualImage->faceTex.constData());
     gl.program->bind();
 
     gl.program->setUniformValue("matrix", m);
     gl.program->setUniformValue("color", color );
 
-    gl.glBindTexture(GL_TEXTURE_2D, backtextID );
+    gl.glBindTexture(GL_TEXTURE_2D, actualImage->glID);
     gl.glDrawArrays(GL_QUADS, 0 , 4);
 
+    QGLShaderProgram * sp = gl.program;
 
+    gl.glDisable(GL_CULL_FACE);
+    sp = gl.solidcolorp;
+    m.translate(0,0,50);
+    m.scale( 0.98f , 0.98f , 1 );
+
+    sp->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+    sp->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+    sp->setAttributeArray   (PROGRAM_VERTEX_ATTRIBUTE  , actualImage->faceVertex.constData());
+    sp->setAttributeArray   (PROGRAM_TEXCOORD_ATTRIBUTE, actualImage->faceTex .constData());
+    sp->bind();
+    sp->setUniformValue("matrix", m);
+    sp->setUniformValue("color", QVector4D (0,0,1,0.8f));
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    gl.glLineWidth(1);
+    gl.glDrawArrays(GL_QUADS, 0, 4 );
+
+    gl.glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+
+}
+
+void Project::mousePressEvent(QMouseEvent *event) {
+    lastPos = event->pos();
+}
+
+void Project::mouseEvent ( QMouseEvent * event ) {
+    float dx = ( float ) ( event->x() - lastPos.x() )/ 5;
+    float dy = ( float ) ( event->y() - lastPos.y() )/ 5;
+
+    Camera * cam;
+    if ( freecam) {
+        cam = man.freeCamera;
+    } else {
+        if ( actualImage != 0 ) {
+            cam = actualImage->getCamera();
+        } else {
+            return;
+        }
+    }
+
+
+    if (event->buttons() & Qt::RightButton) {
+        cam->RotY ( dx );
+        cam->RotX ( dy );
+
+    } else if (event->buttons() & Qt::LeftButton) {
+        cam->UpDown( dy / 10  );
+        cam->LeftRight( dx /10 );
+    }
+    lastPos = event->pos();
 }
 
 void Project::drawObjects(GLWidget &glw)
 {
     if ( !renderEnable) return;
-    QMatrix4x4 mat = man.actualCamera->getMatrix();
-    mat *= objectRoot->getMatrix();
+
+    QMatrix4x4 mat;
+    if ( this->freecam ) {
+        mat = man.freeCamera->getMatrix( viewportAspect );
+
+    } else {
+        if ( actualImage == 0) {
+            mat.perspective(60, viewportAspect, 1, 500);
+        } else {
+            mat = actualImage->getCamera()->getMatrix( viewportAspect );
+        }
+    }
+    //mat *= objectRoot->getMatrix();
     drawHelper( objectRoot , glw, mat );
 }
 
@@ -159,6 +259,9 @@ void Project::drawHelper (ObjectItem *obj, GLWidget &glw, QMatrix4x4 camp) {
     }
 }
 
+/*
+ *
+ * *******************************************************/
 bool Project::keyEvent(QKeyEvent *event){
     if ( actualobject != 0 ) {
          bool proc = actualobject->manipulate( event );
@@ -168,76 +271,57 @@ bool Project::keyEvent(QKeyEvent *event){
     return false;
 }
 
+/*
+ *
+ * *******************************************************/
+bool Project::eventFilter(QObject* object,QEvent* event) {
 
-bool Project::reLoadback () {
-
-    GLWidget & gl = man.getMainGLW();
-
-    if ( backtextID  == 0 ) {
-        gl.glGenBuffers( 1, &backtextID );
-        qDebug() << "Genereste Texture for BAckground, id:" << backtextID;
-    }
-    unsigned int w = actualBackground->cols;
-    unsigned int h = actualBackground->rows;
-
-    gl.glBindTexture ( GL_TEXTURE_2D , backtextID);
-    gl.glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
-                   GL_UNSIGNED_BYTE, ( GLvoid * ) actualBackground->data );
-
-    gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    return true;
-}
-
-bool Project::loadBackground( GLWidget & gl, QString name) {
-
-   /* actualBackground = cv::imread( imagename.toStdString() );
-    if(! actualBackground->data ) {
-        qDebug() <<  "Could not open or find the image: " << imagename;
-        return false;
-    }
-    else {
-        cv::cvtColor( *actualBackground, *actualBackground,   CV_BGR2RGB);
-        int w,h;
-        w = actualBackground->cols;
-        h = actualBackground->rows;
-        if ( backtextID  == 0 ) {
-            gl.glGenBuffers( 1, &backtextID );
+    bool processed = false;
+    if(event->type() == QEvent::KeyPress) {
+        if ( man.keycontrol == Manager::ItemControl ) {
+             processed = keyEvent( ( QKeyEvent * ) event);
+        } else {
+            if ( freecam ) {
+                processed = man.freeCamera->keyEvent(( QKeyEvent * ) event );
+            } else {
+                if ( actualImage != 0) {
+                    processed = actualImage->getCamera()->keyEvent( ( QKeyEvent * ) event  );
+                }
+            }
         }
-        gl.glBindTexture ( GL_TEXTURE_2D , backtextID);
-        gl.glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
-                       GL_UNSIGNED_BYTE, ( GLvoid * ) actualBackground->data );
-        qDebug() << "Genereste Texture for BAckground, id:" << backtextID;
-        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-        return true;
-    }*/
-    return true;
+        if ( processed ) { return true; }
+    }
+    return QObject::eventFilter(object,event);
 }
 
 
+void Project::setViewAngle( int va ) {
+    if ( actualImage != 0 ) {
+        actualImage->getCamera()->setViewAngle(va);
+    }
+}
 
 
 
 
 void Project::clearProject() {
     renderEnable = false;
-    container->clearAlldata();
-    createRoots();
+    actualImage  = 0;
+    actualobject = 0;
+
+    container->clearAlldata( objectRoot );
+    // createRoots();
     renderEnable = true;
-   // qDebug() << "Render Ennbled";
+    // qDebug() << "Render Ennbled";
 }
+
+#define ENDFIRSTPART "#FEND"
 
 /*
  * **************************************************/
-bool Project::loadFile () {
+bool Project::loadFile ( QString & filename) {
     qDebug() << "Load File";
-    std::ifstream is("valami.txt");
+    std::ifstream is(filename.toStdString());
     std::string line;
     if ( !is.is_open()) {
         qDebug() << " File not openned!!!";
@@ -249,23 +333,49 @@ bool Project::loadFile () {
         int  parentID;
         int  ID;
         std::map<int, ObjectItem * > objectmap;
-        for ( int i=0; i < 14; i++ ) {
+        for ( int i=0; i < 10; i++ ) {
             getline ( is, line);
         }
-        // read image name
-        getline ( is, line );
-        imagename = QString ( line.c_str() );
+
+        // ----------- Images --------------------------------------------
+        ObjectItem * pimage;
+        unsigned int i = 0;
+        do {
+            getline ( is, line );
+            qDebug () << line.c_str();
+            if ( line.compare (ENDFIRSTPART) == 0) break;
+            if ( line.compare ("IMAGE") == 0 ) {
+
+                pimage = Obj3dFactory::createObj3d( QString ("IMAGE"), imagesRoot );
+                static_cast<ImageItem * > (pimage)->loadFromFile(is);
+                static_cast<ImageItem * > (pimage)->initPicture();
+                imagesRoot->appendChild( pimage );
+                getline ( is, line );
+            }
+            i++;
+        } while ( 1 && i < 20);
+        // -------- Images end --
+        qDebug() << "END of first part";
+#define DEBUG
         // read camera view angle
-        getline ( is, line );
-        int viewangle = std::atoi( line.c_str() );
-        man.fixCamera->setViewAngle(viewangle);
-        man.freeCamera->setViewAngle(viewangle);
+        //getline ( is, line );
+        //int viewangle = std::atoi( line.c_str() );
+        //man.fixCamera->setViewAngle(viewangle);
+        //man.freeCamera->setViewAngle(viewangle);
+
         std::string otype;
-        while ( !is.eof())
+        while ( !is.eof() )
         {
             // Object factoring magic
             getline ( is, otype );
+#ifdef DEBUG
+            qDebug() << "Type: " << otype.c_str();
+#endif
             getline ( is, line);
+#ifdef DEBUG
+            qDebug() << "ParentID: " << line.c_str();
+#endif
+
             parentID = atoi ( line.c_str());
 
             end  = getline ( is, line);
@@ -298,7 +408,7 @@ bool Project::loadFile () {
         }
     }
     is.close();
-    this->loadBackground(man.getMainGLW(), imagename);
+    //this->loadBackground(man.getMainGLW(), imagename);
     container->updateModel();
     return true;
 }
@@ -309,25 +419,36 @@ bool Project::loadFile () {
  *
  *
  * ************************************************************************/
-bool Project::saveToFile () {
+bool Project::saveToFile ( QString & filename ) {
     int objID = 0;
     int level = 0;
-    std::ofstream outstream("valami.txt");
+    std::ofstream outstream( filename.toStdString());
     if ( !outstream.is_open() )
     {
         qDebug() << "File not openned!";
         return false;
     }
 
-    for ( int i= 0; i < 14; i++ ) {
+    for ( int i= 0; i < 10; i++ ) {
         outstream << i << std::endl;
     }
-    outstream << this->imagename.toStdString() << std::endl;
-    outstream << (int) man.fixCamera->getViewAngle() << std::endl;
+ // outstream << this->imagename.toStdString() << std::endl;
+ //   outstream << (int) man.fixCamera->getViewAngle() << std::endl;
+    saveImagesData ( outstream );
+    outstream << ENDFIRSTPART << std::endl;
     saveChildren ( objID, level, objectRoot, outstream );
     outstream.close();
     return true;
 }
+
+bool Project::saveImagesData (  std::ofstream & of ) {
+   for ( int  i= 0; i < imagesRoot->childCount(); i++ ) {
+       imagesRoot->child(i)->saveToFile(of);
+       of << "###### check this line!" << std::endl;
+   }
+   return true;
+}
+
 
 /*
  * Save QuadObj from Treemodell container

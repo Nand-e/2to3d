@@ -9,6 +9,7 @@
 #include <QVector3D>
 #include <QModelIndex>
 #include <QObject>
+#include <QMouseEvent>
 
 /*
  * Holds the preject specific information such a
@@ -21,6 +22,7 @@ class QMatrix4x4;
 class QKeyEvent;
 class Manager;
 class ObjectItem;
+class ImageItem;
 
 
 
@@ -34,38 +36,57 @@ public:
     void clearProject();
     void createRoots ();
 
-    bool keyEvent       (QKeyEvent*event);
-    void initGlpart     (GLWidget &gl );
-    void drawObjects    (GLWidget &glw);
-    void drawBackground (GLWidget &glw) ;
-    bool loadBackground (GLWidget & gl, QString name = "" );
+
+    void initGlpart     ( GLWidget &gl );
+    void drawObjects    ( GLWidget &glw);
+    void drawBackground ( GLWidget &glw) ;
+    void aspectChanged  ( float aspect );
+
+    void addImage  ();                          // Add new elemet to project and update the view
+    void addObject (ObjectItem * newItem);      // Add new elemet to project and update the view
+    void deleteObject (ObjectItem * item );
+
 
     Manager & getManger();
-    bool reLoadback ();
-    bool saveToFile ();  
-    bool loadFile();
+
+    bool saveToFile ( QString & filename );
+    bool loadFile(QString &filename);
+    bool saveImagesData (  std::ofstream & of );
     bool saveChildren (int parentid, int & level, ObjectItem *obj,  std::ofstream & str );
 
+    void setFreecam ( bool c ) { freecam = c; }
+
+    void mouseEvent      ( QMouseEvent * event );
+    void mousePressEvent ( QMouseEvent * event );
+    bool keyEvent        ( QKeyEvent * event);
+    bool eventFilter     ( QObject * object, QEvent * event);
 
 public slots:
-    void treeCliked(QModelIndex index);
+    void treeCliked   ( QModelIndex index);
+    void setViewAngle ( int va);
+
+
 
 //private: not private for test
 public:
-    TreeModel  * container;                         // data Container for project data
-    ObjectItem * actualobject;
+    TreeModel  * const container;                          // data Container for project data
+
     ObjectItem * imagesRoot;
     ObjectItem * objectRoot;
-    unsigned int backtextID;    
-    cv::Mat * actualBackground;                      // background image
+
+    ImageItem  * actualImage;
+    ObjectItem * actualobject;
 
 private:
-    QString imagename;
+
+    bool    freecam;
     bool    renderEnable;
+    float   viewportAspect;
+    QPoint  lastPos;
     Manager & man;
     void    drawHelper (ObjectItem *obj, GLWidget &glw, QMatrix4x4 camp);
 
-    QVector<QVector3D> faceVertex;                 // background image object vertex
+    QVector<QVector3D> faceVertex;                                          // background image object vertex
     QVector<QVector2D> faceTex;
 };
 

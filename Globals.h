@@ -3,7 +3,7 @@
 
 #include "manager.h"
 
-extern Manager * manager;
+//extern Manager * manager;
 
 
 

@@ -145,7 +145,7 @@ void CubeObj::takeTexture() {
     }
 
     // camera mat * parent mat * parent mat ..... * parent mat * this mat * this scale
-    cmat = pro.getManger().fixCamera->getMatrix();
+//    cmat = pro.getManger().fixCamera->getMatrix();          // TODO
     for ( int i=0 , e = mats.size(); i < e ; i ++ ) {
         cmat *= mats.top();
         mats.pop();
@@ -176,7 +176,7 @@ void CubeObj::takeTexture() {
     ocoords[3] = cv::Point2f (w, 0);
 
     cv::Point2f textpoints[24];      // TODO
-    UvtoCvCoordinate( *pro.actualBackground, projectedPoints, textpoints );
+ //   UvtoCvCoordinate( *pro.actualBackground, projectedPoints, textpoints ); TODO
 /*
     // for test
     for ( int i = 0; i < 24 ; i++) {
@@ -189,7 +189,7 @@ void CubeObj::takeTexture() {
     GLWidget & gl = pro.getManger().getMainGLW();
     for ( int i =0; i < 6; i++) {
         cv::Mat ptransform = getPerspectiveTransform ( &textpoints[i*4], ocoords);
-        cv::warpPerspective( *pro.actualBackground, *textureMat, ptransform,  textureMat->size() );
+//        cv::warpPerspective( *pro.actualBackground, *textureMat, ptransform,  textureMat->size() );
         if ( textureIDs[i] == 0 ) {
             gl.glGenBuffers( 1, &textureIDs[i]);
             qDebug() << "TextureId:" << textureIDs[i];

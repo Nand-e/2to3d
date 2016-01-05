@@ -19,7 +19,6 @@ public:
     GLWidget & getMainGLW ();                                   // give the mainwindow main glwidget back
 
     void Init();
-    bool eventFilter(QObject* object,QEvent* event);
 
     void sedEdges ( bool e ) { edges = e; }
 
@@ -27,17 +26,15 @@ public:
 
    Obj3dFactory    * factory;
    Camera          * actualCamera;
-   Camera          * fixCamera;
-   Camera          * freeCamera;        // 3D camera
+
+   //Camera          * fixCamera;
+   Camera          * freeCamera;     // 3D camera
    Project         * mainproject;   // Project container
    ProjectTreeView * ptreeview;     // Treeview for project data
    MainWindow      * mainwindow;
    KeyControl       keycontrol;
 
-
    bool edges;
-
-
 };
 
 #endif // MANAGER_H

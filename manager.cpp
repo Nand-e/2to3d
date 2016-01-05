@@ -16,11 +16,9 @@
 Manager::Manager()
 {
     freeCamera       = 0;
-    fixCamera    = 0;
-    actualCamera = 0;
-    mainproject  = 0;
-
-    keycontrol = CameraControl;
+    actualCamera     = 0;
+    mainproject      = 0;
+    keycontrol       = CameraControl;
 }
 
 /*
@@ -29,41 +27,26 @@ Manager::Manager()
  * *************************************************/
 void Manager::Init() {
 
-    freeCamera   = new Camera();                 // Opengl camera matirx for viewing
-    fixCamera    = new Camera();
-    actualCamera = fixCamera;
-
-    ptreeview   = new ProjectTreeView ();
+    freeCamera  = new Camera();                       // Opengl camera matirx for viewing
+    ptreeview   = new ProjectTreeView (0, *this );
+    mainproject = new Project   ( *this );            // Proejct for contain data for .....
     mainwindow  = new MainWindow( *this );
-    mainproject = new Project   ( *this );      // Proejct for contain data for .....
+
     QObject::connect (ptreeview, SIGNAL(clicked(QModelIndex)), mainproject, SLOT(treeCliked(QModelIndex)));
 
-    factory = new Obj3dFactory ( mainproject);
+    factory = new Obj3dFactory ( mainproject );
     mainwindow->show();
     mainproject->initGlpart ( (mainwindow->getMainGLW()) );
 }
 
 Manager::~Manager () {
     delete freeCamera;
-    delete fixCamera;
     delete mainproject;
     delete ptreeview;
 }
 
 
-bool Manager::eventFilter(QObject* object,QEvent* event) {
 
-    bool processed = false;
-    if(event->type() == QEvent::KeyPress) {
-        if ( keycontrol == Manager::ItemControl ) {
-             processed = mainproject->keyEvent( ( QKeyEvent * ) event);
-        } else {
-             processed = freeCamera->keyEvent(( QKeyEvent * ) event );
-        }
-        if ( processed ) { return true; }
-    }
-    return QObject::eventFilter(object,event);
-}
 
 
 /*

@@ -18,6 +18,6 @@ int main(int argc, char *argv[])
 
     manager = new Manager ();               // Contain main classes and controll them
     manager->Init();                        // Init main classes
-    app.installEventFilter(manager);
+    app.installEventFilter(manager->mainproject);
     return app.exec();
 }

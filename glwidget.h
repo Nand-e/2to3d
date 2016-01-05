@@ -61,9 +61,6 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
-    void rotateBy(int xAngle, int yAngle, int zAngle);
-    void UploadTexture ( unsigned int w, unsigned int h, uchar * data );              // Uploads texture
-
 
 signals:
     void clicked();
@@ -82,24 +79,17 @@ public:
 
 
 //private:
-    void DrawBack();        // Draw background texture
-
-   // void makeObject();
-   // float viewAngle;
 
     QColor clearColor;
-    QPoint lastPos;
 
-
-
-/*    GLuint textures[6];
-    QVector<QVector3D> vertices;
-    QVector<QVector2D> texCoords;*/
     QGLShaderProgram * program;
     QGLShaderProgram * program2;
     QGLShaderProgram * solidcolorp;    
-    Manager & man;
+    float getAspect () { return aspectRatio; }
 
+private:
+    Manager & man;
+    float aspectRatio;
 
 };
 

@@ -85,53 +85,33 @@ void GLWidget::initializeGL()
     InitShaders();
 }
 
-
-/*
- * Draw background image
- * *************************************/
-void GLWidget::DrawBack() {
-    man.mainproject->drawBackground(*this);
-}
-
-
 void GLWidget::paintGL()
 {
     qglClearColor(clearColor);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    DrawBack();
+    man.mainproject->drawBackground(*this);
     man.mainproject->drawObjects( *this );
-
     return;
 }
 
 void GLWidget::resizeGL(int width, int height)
 {
-     glViewport( 0, 0, width, height);
+    glViewport( 0, 0, width, height);
+    float f = (float) width / height;
+    man.mainproject->aspectChanged ( f );
+
 }
 
-void GLWidget::mousePressEvent(QMouseEvent *event)
-{
-    lastPos = event->pos();
+void GLWidget::mouseMoveEvent(QMouseEvent *event) {
+    man.mainproject->mouseEvent (event );
+}
+
+void GLWidget::mousePressEvent(QMouseEvent *event) {
+    man.mainproject->mousePressEvent( event );
 }
 
 void GLWidget::wheelEvent(QWheelEvent * wevent) {
     man.freeCamera->Step( 0, wevent->delta() /100 );            // TODO
-}
-
-void GLWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    float dx = ( float ) ( event->x() - lastPos.x() )/ 5;
-    float dy = ( float ) ( event->y() - lastPos.y() )/ 5;
-
-    if (event->buttons() & Qt::RightButton) {
-        man.freeCamera->RotY ( dx );
-        man.freeCamera->RotX ( dy );
-
-    } else if (event->buttons() & Qt::LeftButton) {
-        man.freeCamera->UpDown( dy / 10  );
-        man.freeCamera->LeftRight( dx /10 );
-    }
-    lastPos = event->pos();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent * /* event */)

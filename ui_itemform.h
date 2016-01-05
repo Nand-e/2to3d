@@ -79,17 +79,17 @@ public:
         font.setPointSize(6);
         frame->setFont(font);
         frame->setStyleSheet(QLatin1String("#frame{\n"
-"border: 2px solid gray;\n"
-"border-radius: 5px;\n"
+"border:1px solid gray;\n"
+"border-radius: px;\n"
 "background: white;\n"
-"background: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #eef, stop: 1 #ccf);\n"
+"background: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #eef, stop: 1 #22f);\n"
 "}\n"
 "\n"
 "QLineEdit {\n"
 "padding: 1px;\n"
 "border-style: solid;\n"
 "border: 1px solid gray;\n"
-"border-radius: 3px;\n"
+"border-radius: 2px;\n"
 "}"));
         frame->setFrameShape(QFrame::StyledPanel);
         frame->setFrameShadow(QFrame::Raised);
@@ -105,8 +105,8 @@ public:
         sizePolicy.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
         label_2->setSizePolicy(sizePolicy);
         label_2->setMaximumSize(QSize(200, 20));
-        label_2->setFrameShape(QFrame::WinPanel);
-        label_2->setLineWidth(3);
+        label_2->setFrameShape(QFrame::StyledPanel);
+        label_2->setLineWidth(2);
         label_2->setMargin(0);
 
         verticalLayout_2->addWidget(label_2, 0, Qt::AlignHCenter);

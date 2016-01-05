@@ -29,8 +29,11 @@ public:
     int           columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     bool          insertRow(int row, const QModelIndex & parent = QModelIndex());
 
+    bool          addObject    (ObjectItem * item);
+    bool          deleteObject ( ObjectItem * Item);
 
-    void clearAlldata();
+
+    void clearAlldata(ObjectItem *item);
     void createRootItems ();
     void updateModel ();
     ObjectItem *  rootItem;             // TODO

@@ -6,7 +6,7 @@ Camera::Camera()
 {
     mat.setToIdentity();
     viewAngle = 45;
-    mat0.perspective( viewAngle , 1 , 1 , viewAngle );
+    mat0.perspective( viewAngle , 1 , 1 , 500 );
     pos = QVector3D ( 0, -2, -10);
     roty = rotx = 0;
 }
@@ -87,8 +87,9 @@ void Camera::Step(float x, float z) {
     //qDebug() << pos;
 }
 
-const QMatrix4x4 &Camera::getMatrix() {
-    mat = mat0;
+const QMatrix4x4 &Camera::getMatrix( float aspect ) {
+    mat.setToIdentity();
+    mat.perspective( viewAngle, aspect,1,500 );
     mat.translate(pos);
     mat.rotate( roty, 0, 1.0f ,0 );
     mat.rotate( rotx, 1, 0 ,0 );    

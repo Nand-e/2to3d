@@ -98,7 +98,7 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const
     if (parentItem == rootItem)
         return QModelIndex();
 
-    return createIndex(parentItem->row(), 0, parentItem);
+    return createIndex(parentItem->rowinParentList(), 0, parentItem);
 }
 
 int TreeModel::rowCount(const QModelIndex &parent) const
@@ -119,15 +119,36 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 /*
  * Delete All item apartf from rootItem
  * *****************************************/
-void TreeModel::clearAlldata() {
-  this->beginResetModel();
-  rootItem->deleteChildren();
-  this->endResetModel();
+void TreeModel::clearAlldata( ObjectItem * item) {
+  beginResetModel();
+  item->deleteChildren();
+  endResetModel();
 }
 
 void TreeModel::updateModel () {
         this->beginResetModel();
       this->endResetModel();
+}
+
+bool TreeModel::addObject(ObjectItem * item ) {
+     QModelIndex parentIndex = createIndex(item->parentItem()->rowinParentList() ,0,
+                                           item->parentItem() );
+
+     beginInsertRows(parentIndex, item->parentItem()->childCount(), item->parentItem()->childCount() );
+     item->parentItem()->appendChild( item );
+     endInsertRows();
+     return true;
+}
+
+bool TreeModel::deleteObject(ObjectItem * item) {
+
+    QModelIndex pindex =  createIndex(item->parentItem()->rowinParentList(),0,
+                                      item->parentItem());
+
+    this->beginRemoveRows(pindex,item->rowinParentList(), item->rowinParentList() );
+    item->parentItem()->deleteChild ( item ) ;
+    this->endRemoveRows();
+    return true;
 }
 
 

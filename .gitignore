@@ -39,6 +39,9 @@ $RECYCLE.BIN/
 .Trashes
 .VolumeIcon.icns
 
+/debug
+
+
 # Directories potentially created on remote AFP share
 
 build-textures-Debug/

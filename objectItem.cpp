@@ -52,7 +52,7 @@ ObjectItem *ObjectItem::parentItem()
     return m_parentItem;
 }
 
-int ObjectItem::row() const
+int ObjectItem::rowinParentList() const
 {
     if (m_parentItem)
         return m_parentItem->m_childItems.indexOf(const_cast<ObjectItem *> ( this));
@@ -65,6 +65,15 @@ void ObjectItem::deleteChildren() {
         delete m_childItems.at(i);
     }
     m_childItems.clear();
+}
+
+
+bool ObjectItem::deleteChild ( ObjectItem * item) {
+
+
+    m_childItems.removeOne( item );
+   delete item;
+    return true;
 }
 
 

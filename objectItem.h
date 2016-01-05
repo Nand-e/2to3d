@@ -24,7 +24,8 @@ public:
     int  childCount() const;
     int  columnCount() const;
     void deleteChildren();
-    int  row() const;
+    bool deleteChild ( ObjectItem * );
+    int  rowinParentList() const;
     QVariant data(int column) const;  
 
     // This inmplemented in Empty Item
@@ -47,6 +48,19 @@ protected:
     QList<ObjectItem *> m_childItems;
     ObjectItem *m_parentItem;
 };
+
+ /* ObjectItem
+         |
+         V
+    EmptyItem
+         |
+         V
+    3dItems
+
+
+ */
+
+
 
 
 
